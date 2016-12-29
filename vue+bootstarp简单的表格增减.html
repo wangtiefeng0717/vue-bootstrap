@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>vue+bootstarp简单的留言板</title>
+	<link rel="stylesheet" href="lib/bootstrap.min.css">
+	<script src="lib/jquery.min.js"></script>
+	<script src="lib/bootstrap.min.js"></script>
+
+	<script src="js/vue.js"></script>
+	<script>
+		window.onload = function(){
+			new Vue({
+				el:'#container',
+				data:{
+					myData:[
+						{name:'老王',age:33},
+						{name:'老李',age:40}
+					],
+					username:'',
+					age:''
+				},
+				methods:{
+					add:function(){
+						this.myData.push({
+							name:this.username,
+							age: this.age
+						});
+						this.username = '';
+						this.age = '';
+					},
+					remove:function(){
+						this.myData.splice(this.index,1)
+					},
+					all_remove:function(){
+						this.myData = [];
+					}
+				}
+			})
+		}
+	</script>
+</head>
+<body>
+	<div class="container" id='container'>
+		<form role='form'>
+			<div class="form-group">
+				<label for="username">用户名：</label>
+				<input type="text" name="username" class='form-control' v-model='username' placeholder='请输入用户名'>
+			</div>
+			<div class="form-group">
+				<label for="age">年龄：</label>
+				<input type="text" name="age" class='form-control' v-model='age' placeholder="请输入年龄">
+			</div>
+			<div class="form-group">
+				<input type="button" value="添加" class='btn btn-info' v-on:click='add()'>
+				<input type="reset" value="重置" class='btn btn-danger'>
+			</div>
+		</form>
+		<hr>
+		<table class="table table-bordered table-hover">
+			<caption class='h4 text-center'>用户信息表</caption>
+			<tr class='text-danger'>
+				<th class='text-center'>序号</th>
+				<th class='text-center'>姓名</th>
+				<th class='text-center'>年龄</th>
+				<th class='text-center'>操作</th>
+			</tr>
+			<tr class='text-center' v-for='(item,index) of myData'>
+				<td>{{index+1}}</td>
+				<td>{{item.name}}</td>
+				<td>{{item.age}}</td>
+				<td><input type="button" value="删除" class='btn btn-primary btn-xs' v-on:click='remove()'></td>
+			</tr>
+			<tr v-show='myData.length == 0'>
+				<td colspan="4" class="text-center">
+					<p>暂无数据...</p>
+				</td>
+			</tr>
+			<tr class='text-right' v-show='myData.length !=0'>
+				<td colspan="4">
+					<input type="button" value="删除全部" class='btn btn-danger' data-toggle='modal' data-target='#myData'>
+				</td>
+			</tr>
+		</table>
+
+
+		<!-- 模态框 -->
+		<div class="modal fade" role='dialog' id='myData'>
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button class='close' data-dismiss='modal'><span>&times;</span></button>
+						<h4 class='modal-title'>确认删除</h4>
+					</div>
+					<div class="modal-body">
+						<p class='text-center'>真的要全部删除吗？</p>
+					</div>
+					<div class="modal-footer text-right">
+						<input type="button" value="取消" class='btn btn-info' data-dismiss='modal'>
+						<input type="button" value="确定" class='btn btn-danger' data-dismiss='modal' v-on:click='all_remove()'>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+
+	</div>
+</body>
+</html>
+
+
+
+
+
